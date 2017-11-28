@@ -20,6 +20,13 @@ void Algorithms::execute()
 
 	for (int i = 0; i < thisRuns; ++i)
 	{
+		if (thisPrint) 
+		{
+			if (i != 0)
+			{
+				thisPrint = false;
+			}
+		}
 		cout << endl << endl << "Run " << i + 1 << endl << endl;
 
 		cout << "Calculating Eratosthenes..." << endl;
@@ -40,14 +47,8 @@ void Algorithms::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	if (thisPrint)
-	{
-		file = "Eratosthenes_serial_time.csv";
-	}
-	else
-	{
-		file = "Eratosthenes_serial_time_loopOnlytry.csv";
-	}
+	file = "Eratosthenes_serial_time_loopOnly_lab.csv";
+
 
 	ofstream timings(file, ios_base::app);
 	ofstream primes("Eratosthenes_primes.csv", ios_base::out);
@@ -69,6 +70,12 @@ void Algorithms::SieveOfEratosthenes() {
 		}
 	}
 
+
+	auto end = system_clock::now();
+	auto total = duration_cast<milliseconds>(end - start).count();
+	timings << total / 1000.0 << endl;
+	timings.close();
+
 	if (thisPrint)
 	{
 		// Print all prime numbers
@@ -82,10 +89,6 @@ void Algorithms::SieveOfEratosthenes() {
 		}
 	}
 
-	auto end = system_clock::now();
-	auto total = duration_cast<milliseconds>(end - start).count();
-	timings << total / 1000.0 << endl;
-	timings.close();
 	primes.close();
 }
 
@@ -104,14 +107,8 @@ void Algorithms::SieveOfSundaram()
 
 	string file;
 
-	if (thisPrint)
-	{
-		file = "Sundaram_serial_time.csv";
-	}
-	else
-	{
-		file = "Sundaram_serial_time_loopOnlytry.csv";
-	}
+	file = "Sundaram_serial_time_loopOnly_lab.csv";
+
 
 	ofstream timings(file, ios_base::app);
 	ofstream primes("Sundaram_primes.csv", ios_base::out);
@@ -135,6 +132,11 @@ void Algorithms::SieveOfSundaram()
 		}
 	}
 
+	auto end = system_clock::now();
+	auto total = duration_cast<milliseconds>(end - start).count();
+	timings << total / 1000.0 << endl;
+	timings.close();
+
 	if (thisPrint)
 	{
 		// 2 is the only even prime number, so it will be printed separately
@@ -148,10 +150,7 @@ void Algorithms::SieveOfSundaram()
 				primes << 2 * i + 1 << endl;
 	}
 
-	auto end = system_clock::now();
-	auto total = duration_cast<milliseconds>(end - start).count();
-	timings << total / 1000.0 << endl;
-	timings.close();
+
 	primes.close();
 }
 
@@ -165,14 +164,8 @@ void Algorithms::SieveOfAtkin()
 
 	string file;
 
-	if (thisPrint)
-	{
-		file = "Atkin_serial_time.csv";
-	}
-	else
-	{
-		file = "Atkin_serial_time_loopOnlytry.csv";
-	}
+	file = "Atkin_serial_time_loopOnly_lab.csv";
+
 
 	ofstream timings(file, ios_base::app);
 	ofstream primes("Atkin_primes.csv", ios_base::out);
@@ -218,6 +211,11 @@ void Algorithms::SieveOfAtkin()
 		}
 	}
 
+	auto end = system_clock::now();
+	auto total = duration_cast<milliseconds>(end - start).count();
+	timings << total / 1000.0 << endl;
+	timings.close();
+
 	// Mark all multiples of squares as non-prime
 	for (int i = 5; i <= lim; i++)
 	{
@@ -243,10 +241,6 @@ void Algorithms::SieveOfAtkin()
 		}
 	}
 
-	auto end = system_clock::now();
-	auto total = duration_cast<milliseconds>(end - start).count();
-	timings << total / 1000.0 << endl;
-	timings.close();
 	primes.close();
 
 }
