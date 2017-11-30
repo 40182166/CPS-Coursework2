@@ -189,11 +189,6 @@ void Serial::SieveOfAtkin()
 		}
 	}
 
-	auto end = system_clock::now();
-	auto total = duration_cast<milliseconds>(end - start).count();
-	timings << total / 1000.0 << endl;
-	timings.close();
-
 	// Mark all multiples of squares as non-prime
 	for (int i = 5; i <= lim; i++)
 	{
@@ -206,6 +201,12 @@ void Serial::SieveOfAtkin()
 			}
 		}
 	}
+
+	
+	auto end = system_clock::now();
+	auto total = duration_cast<milliseconds>(end - start).count();
+	timings << total / 1000.0 << endl;
+	timings.close();
 
 	if (thisPrint)
 	{

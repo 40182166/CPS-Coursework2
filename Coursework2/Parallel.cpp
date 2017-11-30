@@ -104,13 +104,12 @@ void Parallel::SieveOfSundaram()
 
 	int i, j;
 
-#pragma omp parallel for
+
 	for (i = 1; i < nNew; ++i)
 	{
 		// from i + j + 2 * i * j <= nNew that can be solved as  j <= (nNew - i) / (2 * i + 1)
 		l = (nNew - i) / (2 * i + 1);
 
-#pragma omp parallel for
 		for (j = i; j <= l; ++j)
 		{
 			// numbers of the form of i + j + 2 * i * j are not prime
