@@ -12,20 +12,18 @@ using namespace std::chrono;
 class Algorithms
 {
 public:
-	Algorithms(int lim, int runs, bool print);
-	~Algorithms();
+	Algorithms() {};
+	~Algorithms() {};
 
-	void execute();
+	virtual void execute();
 
 	int thisLimit;
 	int thisRuns;
 	bool thisPrint;
 
-
-	void SieveOfEratosthenes();
-	void SieveOfSundaram();
-	void SieveOfAtkin();
-
+	virtual void SieveOfEratosthenes() {};
+	virtual void SieveOfSundaram() {};
+	virtual void SieveOfAtkin() {};
 
 };
 

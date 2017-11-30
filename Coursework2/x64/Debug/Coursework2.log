@@ -1,4 +1,2 @@
-﻿  Coursework2.cpp
-f:\desktop\università\year 4\concurrent of parrallel systems\coursework2\cps-coursework\coursework2\coursework2.cpp(118): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  Coursework2.vcxproj -> F:\Desktop\Università\Year 4\Concurrent of Parrallel Systems\Coursework2\CPS-Coursework\Coursework2\x64\Debug\Coursework2.exe
-  Coursework2.vcxproj -> F:\Desktop\Università\Year 4\Concurrent of Parrallel Systems\Coursework2\CPS-Coursework\Coursework2\x64\Debug\Coursework2.pdb (Partial PDB)
+﻿  Algorithms.cpp
+  Coursework2.vcxproj -> C:\Users\40182166\Documents\GitHub\CPS-Coursework2\Coursework2\x64\Debug\Coursework2.exe

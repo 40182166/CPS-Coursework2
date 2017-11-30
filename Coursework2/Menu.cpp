@@ -7,14 +7,8 @@ Menu::Menu()
 	mainMenu();
 }
 
-
 Menu::~Menu()
 {
-}
-
-Algorithms Menu::executeEverything()
-{
-	return Algorithms(limit, numberRuns, toPrint);
 }
 
 void Menu::mainMenu()
@@ -28,7 +22,7 @@ void Menu::mainMenu()
 		cout << "Executing the program without setting new options, will run the default settings:" << endl;
 		cout << "- Serial (no technique)" << endl;
 		cout << "- 1 run for each algorithm" << endl;
-		cout << "- Writing to file prime numbers (this is included in the timings)" << endl << endl << endl;
+		cout << "- Writing to file prime numbers (only for first run)" << endl << endl << endl;
 
 		cout << "---- MAIN MENU ----" << endl << endl;
 		cout << "Select one of the following : " << endl;
@@ -59,6 +53,23 @@ void Menu::mainMenu()
 		}
 
 	} while (input != 2);
+}
+
+void Menu::executeEverything()
+{
+	switch (technique)
+	{
+	case 1:
+		Serial(limit, numberRuns, toPrint);
+		break;
+	case 2:
+		Parallel(limit, numberRuns, toPrint);
+		break;
+	default:
+		Serial(limit, numberRuns, toPrint);
+		break;
+	}
+
 }
 
 void Menu::continueMenu()
@@ -239,8 +250,8 @@ void Menu::printMenu()
 
 
 		cout << "Writing primes to file? : " << endl;
-		cout << "1 - Yes --> (NOTE: this option will affect the timings, increasing them)" << endl;
-		cout << "2 - No --> (NOTE: this option only includes the main calculation loops in the timings)" << endl;
+		cout << "1 - Yes --> (NOTE: this option will only print results for the first run)" << endl;
+		cout << "2 - No --> (NOTE: first run will be as fast as the following)" << endl;
 		cout << "3 - Back" << endl;
 		cout << endl << "Selection: ";
 
@@ -249,11 +260,11 @@ void Menu::printMenu()
 		switch (input)
 		{
 		case 1:
-			cout << endl << "Writing values to file and including it in timings ..." << endl << endl;
+			cout << endl << "Writing results to file ..." << endl << endl;
 			toPrint = true;
 			break;
 		case 2:
-			cout << endl << "No writing to file..." << endl << endl;
+			cout << endl << "No results to file..." << endl << endl;
 			toPrint = false;
 			break;
 		case 3:

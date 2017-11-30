@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <iostream>
 #include "Algorithms.h"
+#include "Parallel.h"
+#include "Serial.h"
 
 using namespace std;
 
@@ -11,7 +13,7 @@ public:
 	Menu();
 	~Menu();
 
-	Algorithms executeEverything();
+	void executeEverything();
 
 	int numberRuns = 1;
 
