@@ -25,7 +25,7 @@ void Serial::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_serial_time_home.csv";
+	file = "Eratosthenes_serial_time_lab.csv";
 
 
 	ofstream timings(file, ios_base::app);
@@ -65,47 +65,60 @@ void Serial::SieveOfEratosthenes() {
 			{
 				primes << i << endl;
 			}
-		}	
+		}
 		primes.close();
 	}
 
 }
 
-// Mainly from : http://www.sanfoundry.com/cpp-program-generate-prime-numbers-between-given-range-using-sieve-sundaram/
+// From : http://www.sanfoundry.com/cpp-program-generate-prime-numbers-between-given-range-using-sieve-sundaram/
 void Serial::SieveOfSundaram()
 {
-	int n = thisLimit;
+	int setPrime = 0; // variable used in the array that stores the prime numbers found
+	int nPrimes = 0; // prime counter
 
 	// The algorithm produces prime numbers smaller than a given number n.
 	// It also doesn't consider even numbers, so only n / 2 is needed
-	int nNew = n / 2;
+	int n = thisLimit / 2;
 
-	// Creating a vector of booleans and initializing values as true
-	vector<bool> isPrime(nNew + 1, true);
-
+	//// Creating a vector of int and initializing values as 1
+	vector<int> isPrime(thisLimit, 1);
 
 	string file;
 
-	file = "Sundaram_serial_time_home.csv";
-
+	file = "Sundaram_serial_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
 	auto start = system_clock::now();
-	int l;
 
-	for (int i = 1; i < nNew; ++i)
+
+	for (int i = 1; i < n; i++)
 	{
 		// from i + j + 2 * i * j <= nNew that can be solved as  j <= (nNew - i) / (2 * i + 1)
-
-		for (int j = i; j <= (nNew - i) / (2 * i + 1); ++j)
+		for (int j = i; j <= (n - i) / (2 * i + 1); j++)
 		{
 			// numbers of the form i + j + 2 * i * j are not prime
 			// E.g. i = 1, j = 2
 			// 1 + 2 + 2 * 1 * 2 = 7
-			// the boolean at isPrime[7] will be marked as false
-			// when printing, this will be skipped as 2 * 7 + 1 = 15 --> not a prime
-			isPrime[i + j + 2 * i * j] = false;
+			// the boolean at isPrime[7] will be marked as 0
+			isPrime[i + j + 2 * i * j] = 0;
+		}
+	}
+
+	// 2 is the only even prime number, so it will be printed separately
+	if (thisLimit >= 2)
+	{
+		isPrime[setPrime++] = 2;
+	}
+
+	for (int i = 1; i < n; i++)
+	{
+		// Number that were previously set to 0 are not prime, the others
+		if (isPrime[i] != 0)
+		{
+			isPrime[setPrime++] = i * 2 + 1;
+			nPrimes++;			//counting primes
 		}
 	}
 
@@ -118,24 +131,20 @@ void Serial::SieveOfSundaram()
 	{
 		ofstream primes("Sundaram_primes.csv", ios_base::out);
 
-		// 2 is the only even prime number, so it will be printed separately
-		if (n >= 2)
-			primes << 2 << endl;
-
-		// Print other primes. Remaining primes are of the form
-		// 2*i + 1 such that marked[i] is false.
-		for (int i = 1; i <= nNew; i++)
+		for (int x = 0; x < nPrimes; x++)
 		{
-			if (isPrime[i])
+			// If the prime number does not equal zero then output - else then break
+			if (isPrime[x] != 0)
 			{
-				primes << 2 * i + 1 << endl;
+				primes << isPrime[x] << endl;
+			}
+			else
+			{
+				break;
 			}
 		}
 		primes.close();
-
 	}
-
-
 }
 
 // From : http://www.sanfoundry.com/cpp-program-implement-sieve-atkins/
@@ -148,7 +157,7 @@ void Serial::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_serial_time_home.csv";
+	file = "Atkin_serial_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 

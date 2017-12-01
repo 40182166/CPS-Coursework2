@@ -1,11 +1,11 @@
 #pragma once
 #include "Algorithms.h"
 
-class Parallel : public Algorithms
+class OpenMP : public Algorithms
 {
 public:
-	Parallel(int lim, int runs, bool print);
-	~Parallel();
+	OpenMP(int lim, int runs, bool print);
+	~OpenMP();
 
 	virtual void SieveOfEratosthenes();
 	virtual void SieveOfSundaram();
@@ -13,3 +13,16 @@ public:
 
 };
 
+class Thread : public Algorithms
+{
+public:
+	Thread(int lim, int runs, bool print);
+	~Thread();
+
+	virtual void SieveOfEratosthenes();
+	virtual void SieveOfSundaram();
+	virtual void SieveOfAtkin();
+
+	void threadedEratosthenes(int start, int end, vector<bool>& primes);
+
+};

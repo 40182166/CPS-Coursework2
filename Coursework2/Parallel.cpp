@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Parallel.h"
 #include <thread>
+#include <fstream>
+#include <xmmintrin.h>  
 
-
-Parallel::Parallel(int lim, int runs, bool print)
+OpenMP::OpenMP(int lim, int runs, bool print)
 {
 	thisLimit = lim;
 	thisRuns = runs;
@@ -12,18 +13,18 @@ Parallel::Parallel(int lim, int runs, bool print)
 }
 
 
-Parallel::~Parallel()
+OpenMP::~OpenMP()
 {
 }
 
-void Parallel::SieveOfEratosthenes() {
+void OpenMP::SieveOfEratosthenes() {
 
 	int n = thisLimit;
 	// Creating a vector of booleans and initializing values as true
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_tryOMP_time_home.csv";
+	file = "Eratosthenes_tryOMP_time_lab.csv";
 
 	auto nThreads = thread::hardware_concurrency();
 
@@ -77,42 +78,58 @@ void Parallel::SieveOfEratosthenes() {
 }
 
 // Mainly from : http://www.sanfoundry.com/cpp-program-generate-prime-numbers-between-given-range-using-sieve-sundaram/
-void Parallel::SieveOfSundaram()
+void OpenMP::SieveOfSundaram()
 {
-	int n = thisLimit;
+	int setPrime = 0; // variable used in the array that stores the prime numbers found
+	int nPrimes = 0; // prime counter
 
-	// The algorithm produces prime numbers smaller than a given number n.
-	// It also doesn't consider even numbers, so only n / 2 is needed
-	int nNew = n / 2;
+					 // The algorithm produces prime numbers smaller than a given number n.
+					 // It also doesn't consider even numbers, so only n / 2 is needed
+	int n = thisLimit / 2;
 
-	// Creating a vector of booleans and initializing values as true
-	vector<bool> isPrime(nNew + 1, true);
-
-	auto nThreads = thread::hardware_concurrency();
+	//// Creating a vector of int and initializing values as 1
+	vector<int> isPrime(thisLimit, 1);
 
 	string file;
 
-	file = "Sundaram_OMP_time_home.csv";
-
+	file = "Sundaram_OMP_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
+	auto nThreads = thread::hardware_concurrency();
+
 	auto start = system_clock::now();
 
-	int i, j;
-
-#pragma omp parallel for num_threads(nThreads) schedule(static)
-	for (i = 1; i < nNew; ++i)
+	//splitting the workload in chunks of 10
+#pragma omp parallel for num_threads(nThreads) schedule(static, 10)
+	for (int i = 1; i < n; i++)
 	{
 		// from i + j + 2 * i * j <= nNew that can be solved as  j <= (nNew - i) / (2 * i + 1)
-		for (j = i; j <= (nNew - i) / (2 * i + 1); ++j)
+		int l = (n - i) / (2 * i + 1);
+
+		for (int j = i; j <= l; j++)
 		{
-			// numbers of the form of i + j + 2 * i * j are not prime
+			// numbers of the form i + j + 2 * i * j are not prime
 			// E.g. i = 1, j = 2
 			// 1 + 2 + 2 * 1 * 2 = 7
-			// the boolean at isPrime[7] will be marked as false
-			// when printing, this will be skipped as 2 * 7 + 1 = 15 --> not a prime
-			isPrime[i + j + 2 * i * j] = false;
+			// the boolean at isPrime[7] will be marked as 0
+			isPrime[i + j + 2 * i * j] = 0;
+		}
+	}
+
+	// 2 is the only even prime number, so it will be printed separately
+	if (thisLimit >= 2)
+	{
+		isPrime[setPrime++] = 2;
+	}
+
+	for (int i = 1; i < n; i++)
+	{
+		// Number that were previously set to 0 are not prime, the others
+		if (isPrime[i] != 0)
+		{
+			isPrime[setPrime++] = i * 2 + 1;
+			nPrimes++;			//counting primes
 		}
 	}
 
@@ -125,27 +142,24 @@ void Parallel::SieveOfSundaram()
 	{
 		ofstream primes("Sundaram_primesOMP.csv", ios_base::out);
 
-		// 2 is the only even prime number, so it will be printed separately
-		if (n >= 2)
-			primes << 2 << endl;
-
-		// Print other primes. Remaining primes are of the form
-		// 2*i + 1 such that marked[i] is false.
-		for (int i = 1; i <= nNew; i++)
+		for (int x = 0; x < nPrimes; x++)
 		{
-			if (isPrime[i])
+			// If the prime number does not equal zero then output - else then break
+			if (isPrime[x] != 0)
 			{
-				primes << 2 * i + 1 << endl;
+				primes << isPrime[x] << endl;
+			}
+			else
+			{
+				break;
 			}
 		}
 		primes.close();
 	}
-
-
 }
 
 // From : http://www.sanfoundry.com/cpp-program-implement-sieve-atkins/
-void Parallel::SieveOfAtkin()
+void OpenMP::SieveOfAtkin()
 {
 	int n = thisLimit;
 
@@ -154,9 +168,11 @@ void Parallel::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_serial_time_home.csv";
+	file = "Atkin_OMP_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
+
+	auto nThreads = thread::hardware_concurrency();
 
 	auto start = system_clock::now();
 
@@ -167,6 +183,9 @@ void Parallel::SieveOfAtkin()
 	// Rounding square root of n up to the nearest integer
 	int lim = (int)ceil(sqrt(n));
 
+	//int y;
+
+#pragma omp parallel for num_threads(nThreads) 	
 	// Looping through x and y, finding numbers that meet the conditions
 	for (int x = 1; x <= lim; x++)
 	{
@@ -199,6 +218,7 @@ void Parallel::SieveOfAtkin()
 		}
 	}
 
+#pragma omp parallel for num_threads(nThreads)
 	// Mark all multiples of squares as non-prime
 	for (int i = 5; i <= lim; i++)
 	{
@@ -231,4 +251,101 @@ void Parallel::SieveOfAtkin()
 		}
 		primes.close();
 	}
+}
+
+Thread::Thread(int lim, int runs, bool print)
+{
+	thisLimit = lim;
+	thisRuns = runs;
+	thisPrint = print;
+	execute();
+}
+
+Thread::~Thread()
+{
+}
+
+void Thread::SieveOfEratosthenes()
+{
+	int n = thisLimit;
+	// Creating a vector of booleans and initializing values as true
+	vector<bool> isPrime(n + 1, true);
+	string file;
+
+	file = "Eratosthenes_threads_time_lab.csv";
+
+	auto nThreads = thread::hardware_concurrency();
+
+	ofstream timings(file, ios_base::app);
+
+	vector<thread> allThreads;
+
+	auto start = system_clock::now();
+
+	auto range = n / nThreads;
+
+	int startPoint = 2;
+
+	//Loop for creating threads based on a start and an end point
+	for (int i = 0; i < nThreads; i++)
+	{
+		//Creating and pushing Threads into a vector
+		allThreads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, startPoint + range, isPrime));
+	}
+
+	for (auto &t : allThreads)
+	{
+		t.join();
+	}
+
+	auto end = system_clock::now();
+	auto total = duration_cast<milliseconds>(end - start).count();
+	timings << total / 1000.0 << endl;
+	timings.close();
+
+	if (thisPrint)
+	{
+		ofstream primes("Eratosthenes_primesThreads.csv", ios_base::out);
+
+		// Print values at isPrime[i], that will be true
+		for (int i = 2; i <= n; i++)
+		{
+			if (isPrime[i])
+			{
+				primes << i << endl;
+			}
+		}
+		primes.close();
+	}
+
+}
+
+void Thread::threadedEratosthenes(int start, int end, vector<bool>& primes)
+{
+	// Setting i to 2, as it is the first prime number
+	// Looping through all numbers up to n
+	int j;
+
+	for (int i = start; i * i <= end; i++)
+	{
+		// If prime[i] is true (unchanged), then the number is a prime
+		// If prime[i] is false, it has been marked as not prime
+		if (primes[i])
+		{
+			// Looping through multiples of i and marking them as false (non-prime)
+			for (j = i * 2; j <= end; j += i)
+			{
+				primes[j] = false;
+			}
+		}
+	}
+
+}
+
+void Thread::SieveOfSundaram()
+{
+}
+
+void Thread::SieveOfAtkin()
+{
 }

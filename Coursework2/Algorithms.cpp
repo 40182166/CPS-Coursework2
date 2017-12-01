@@ -15,10 +15,10 @@ void Algorithms::execute()
 		}
 		cout << endl << endl << "Run " << i + 1 << endl << endl;
 
-		//cout << "Calculating Eratosthenes..." << endl;
-		//SieveOfEratosthenes();
-		cout << "Calculating Sundaram..." << endl;
-		SieveOfSundaram();
+		cout << "Calculating Eratosthenes..." << endl;
+		SieveOfEratosthenes();
+		//cout << "Calculating Sundaram..." << endl;
+		//SieveOfSundaram();
 		//cout << "Calculating Atkin..." << endl;
 		//SieveOfAtkin();
 	}

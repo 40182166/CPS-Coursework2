@@ -63,7 +63,7 @@ void Menu::executeEverything()
 		Serial(limit, numberRuns, toPrint);
 		break;
 	case 2:
-		Parallel(limit, numberRuns, toPrint);
+		Thread(limit, numberRuns, toPrint);
 		break;
 	default:
 		Serial(limit, numberRuns, toPrint);
