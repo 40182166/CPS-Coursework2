@@ -20,7 +20,7 @@ public:
 	// Selecting mode of run (technique)
 	// 1 --> default: serial
 	// 2 --> OpenMP
-	int technique = 1;
+	int technique = 2;
 	int limit = 1000000000;
 
 	bool toPrint = true;
