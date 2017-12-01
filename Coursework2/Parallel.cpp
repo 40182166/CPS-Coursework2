@@ -4,6 +4,7 @@
 #include <fstream>
 #include <xmmintrin.h>  
 
+
 OpenMP::OpenMP(int lim, int runs, bool print)
 {
 	thisLimit = lim;
@@ -24,7 +25,7 @@ void OpenMP::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_tryOMP_time_lab.csv";
+	file = "Eratosthenes_tryOMP_time_home.csv";
 
 	auto nThreads = thread::hardware_concurrency();
 
@@ -53,7 +54,6 @@ void OpenMP::SieveOfEratosthenes() {
 			}
 		}
 	}
-
 
 	auto end = system_clock::now();
 	auto total = duration_cast<milliseconds>(end - start).count();
@@ -92,7 +92,7 @@ void OpenMP::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_OMP_time_lab.csv";
+	file = "Sundaram_OMP_time_home.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -168,7 +168,7 @@ void OpenMP::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_OMP_time_lab.csv";
+	file = "Atkin_OMP_time_home.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -272,7 +272,7 @@ void Thread::SieveOfEratosthenes()
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_threads_time_lab.csv";
+	file = "Eratosthenes_threads_time_home.csv";
 
 	auto nThreads = thread::hardware_concurrency();
 
@@ -285,12 +285,18 @@ void Thread::SieveOfEratosthenes()
 	auto range = n / nThreads;
 
 	int startPoint = 2;
-
 	//Loop for creating threads based on a start and an end point
 	for (int i = 0; i < nThreads; i++)
 	{
+		
+		int endPoint = range;
+		if (i = nThreads - 1)
+		{
+			endPoint = n;
+		}
 		//Creating and pushing Threads into a vector
-		allThreads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, startPoint + range, isPrime));
+		allThreads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, endPoint, isPrime));
+		startPoint = endPoint + 1;
 	}
 
 	for (auto &t : allThreads)
@@ -335,6 +341,7 @@ void Thread::threadedEratosthenes(int start, int end, vector<bool>& primes)
 			// Looping through multiples of i and marking them as false (non-prime)
 			for (j = i * 2; j <= end; j += i)
 			{
+				lock_guard<mutex> lock(mut);
 				primes[j] = false;
 			}
 		}
