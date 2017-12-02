@@ -25,7 +25,7 @@ void Serial::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_serial_time_home.csv";
+	file = "Eratosthenes_serial_time_lab.csv";
 
 
 	ofstream timings(file, ios_base::app);
@@ -86,7 +86,7 @@ void Serial::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_serial_time_home.csv";
+	file = "Sundaram_serial_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -131,7 +131,7 @@ void Serial::SieveOfSundaram()
 	{
 		ofstream primes("Sundaram_primes.csv", ios_base::out);
 
-		for (int x = 0; x < nPrimes; x++)
+		for (int x = 0; x <= nPrimes; x++)
 		{
 			// If the prime number does not equal zero then output - else then break
 			if (isPrime[x] != 0)
@@ -157,7 +157,7 @@ void Serial::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_serial_time_home.csv";
+	file = "Atkin_serial_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 

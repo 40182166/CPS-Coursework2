@@ -27,5 +27,8 @@ public:
 	virtual void SieveOfAtkin();
 
 	void threadedEratosthenes(int start, int end, vector<bool>& primes);
+	void threadedAtkin(int start, int end, vector<bool>& primes);
+	void threadedSundaram(int start, int end, vector<int>& primes);
+
 
 };
