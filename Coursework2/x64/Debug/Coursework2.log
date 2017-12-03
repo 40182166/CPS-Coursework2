@@ -1,4 +1,12 @@
-﻿  Parallel.cpp
-c:\users\40182166\documents\github\cps-coursework2\coursework2\parallel.cpp(289): warning C4018: '<': signed/unsigned mismatch
-c:\users\40182166\documents\github\cps-coursework2\coursework2\parallel.cpp(388): warning C4018: '<=': signed/unsigned mismatch
-  Coursework2.vcxproj -> C:\Users\40182166\Documents\GitHub\CPS-Coursework2\Coursework2\x64\Debug\Coursework2.exe
+﻿  stdafx.cpp
+  Serial.cpp
+  Parallel.cpp
+f:\desktop\università\year 4\concurrent of parrallel systems\coursework2\cps-coursework\coursework2\parallel.cpp(309): warning C4018: '<=': signed/unsigned mismatch
+f:\desktop\università\year 4\concurrent of parrallel systems\coursework2\cps-coursework\coursework2\parallel.cpp(401): warning C4018: '<=': signed/unsigned mismatch
+f:\desktop\università\year 4\concurrent of parrallel systems\coursework2\cps-coursework\coursework2\parallel.cpp(512): warning C4018: '<=': signed/unsigned mismatch
+  Menu.cpp
+  Coursework2.cpp
+  Algorithms.cpp
+  Generating Code...
+  Coursework2.vcxproj -> F:\Desktop\Università\Year 4\Concurrent of Parrallel Systems\Coursework2\CPS-Coursework\Coursework2\x64\Debug\Coursework2.exe
+  Coursework2.vcxproj -> F:\Desktop\Università\Year 4\Concurrent of Parrallel Systems\Coursework2\CPS-Coursework\Coursework2\x64\Debug\Coursework2.pdb (Partial PDB)

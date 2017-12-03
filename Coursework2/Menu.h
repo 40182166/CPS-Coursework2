@@ -15,7 +15,7 @@ public:
 
 	void executeEverything();
 
-	int numberRuns = 1;
+	int numberRuns = 10;
 
 	// Selecting mode of run (technique)
 	// 1 --> default: serial
@@ -23,7 +23,7 @@ public:
 	int technique = 2;
 	int limit = 1000000000; //1000000000
 
-	bool toPrint = true;
+	bool toPrint = false;
 
 	void mainMenu();
 	void continueMenu();

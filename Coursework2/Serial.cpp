@@ -25,7 +25,7 @@ void Serial::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_serial_time_lab.csv";
+	file = "Eratosthenes_serial_time_home.csv";
 
 
 	ofstream timings(file, ios_base::app);
@@ -86,7 +86,7 @@ void Serial::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_serial_time_lab.csv";
+	file = "Sundaram_serial_time_home.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -157,7 +157,7 @@ void Serial::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_serial_time_lab.csv";
+	file = "Atkin_serial_time_home.csv";
 
 	ofstream timings(file, ios_base::app);
 
