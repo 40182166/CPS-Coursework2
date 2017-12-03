@@ -40,7 +40,7 @@ void Menu::mainMenu()
 			break;
 		case 2:
 			cout << "Executing !" << endl << endl;
-			Thread(limit, numberRuns, toPrint);
+			Serial(limit, numberRuns, toPrint);
 
 			//executeEverything();
 			continueMenu();
