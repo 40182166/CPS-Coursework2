@@ -16,6 +16,7 @@ void Menu::mainMenu()
 	int input = 0;
 	do
 	{
+		//Some basic information about the general app
 		cout << endl << "********************************* ---- PRIME NUMBERS KINGDOM ---- *********************************" << endl << endl;
 		cout << "INFO:" << endl;
 		cout << "This program will execute 3 algorithms to generate prime numbers: Eratosthenes, Sundaram and Atkin" << endl;
@@ -40,13 +41,14 @@ void Menu::mainMenu()
 			break;
 		case 2:
 			cout << "Executing !" << endl << endl;
-			Serial(limit, numberRuns, toPrint);
-
-			//executeEverything();
+			// creating the decided technique
+			executeEverything();
+			//after run is completed, everything can be started all over again
 			continueMenu();
 			break;
 		case 3:
 			cout << "Exiting..." << endl << endl;
+			//exit from application
 			exit(1);
 			break;
 		default:
@@ -54,9 +56,10 @@ void Menu::mainMenu()
 			break;
 		}
 
-	} while (input != 2);
+	} while (input != 3);
 }
 
+//method to switch between each technique available
 void Menu::executeEverything()
 {
 	switch (technique)
@@ -65,6 +68,9 @@ void Menu::executeEverything()
 		Serial(limit, numberRuns, toPrint);
 		break;
 	case 2:
+		OpenMP(limit, numberRuns, toPrint);
+		break;
+	case 3:
 		Thread(limit, numberRuns, toPrint);
 		break;
 	default:
@@ -86,12 +92,14 @@ void Menu::continueMenu()
 		cout << "2 - Exit program" << endl;
 		cout << endl << "Selection: ";
 
+		//getting input from cmd
 		input = getInput();
 
 		switch (input)
 		{
 		case 1:
 		{
+			//resetting all variables to default values
 			numberRuns = 1;
 			technique = 1;
 			toPrint = true;
@@ -107,7 +115,8 @@ void Menu::continueMenu()
 			break;
 		}
 
-	} while (input != 5);
+		//exit loop if input is not 2
+	} while (input != 2);
 
 }
 
@@ -129,6 +138,7 @@ void Menu::options()
 
 		switch (input)
 		{
+			//call appropriate option menu according to input
 		case 1:
 			techniqueMenu();
 			break;
@@ -158,6 +168,7 @@ void Menu::techniqueMenu()
 
 		cout << endl << endl << "---- TECHNIQUES MENU ----" << endl << endl;
 		cout << "Current selected technique: ";
+		// Visualize which technique is already selected
 		if (technique == 1)
 		{
 			cout << "Serial" << endl << endl;
@@ -166,16 +177,22 @@ void Menu::techniqueMenu()
 		{
 			cout << "OpenMP" << endl << endl;
 		}
+		else if (technique == 3)
+		{
+			cout << "Threads" << endl << endl;
+		}
 		cout << "Select a technique : " << endl;
 		cout << "1 - Serial" << endl;
 		cout << "2 - OpenMP" << endl;
-		cout << "3 - Back" << endl;
+		cout << "3 - Threads" << endl;
+		cout << "4 - Back" << endl;
 		cout << endl << "Selection: ";
 
 		input = getInput();
 
 		switch (input)
 		{
+			//set technique according to input
 		case 1:
 			cout << endl << "Serial technique will be used..." << endl << endl;
 			technique = 1;
@@ -185,6 +202,10 @@ void Menu::techniqueMenu()
 			technique = 2;
 			break;
 		case 3:
+			cout << endl << "Threads will be used..." << endl << endl;
+			technique = 3;
+			break;
+		case 4:
 			cout << endl << "Going back..." << endl << endl;
 			break;
 		default:
@@ -192,23 +213,24 @@ void Menu::techniqueMenu()
 			break;
 		}
 
-	} while (input != 3);
+	} while (input != 4);
 
 }
 
 void Menu::runsMenu()
 {
-	//numberRuns = 1;
 	int input = -1;
 	do
 	{
 
 		cout << endl << endl << "---- RUNS MENU ----" << endl << endl;
+		// outputs current number of runs
 		cout << "Current number of runs: " << numberRuns << endl << endl;
 		cout << "How many runs for each algorithm? (0 or negative value to go back): ";
 
 		input = getInput();
 
+		//check if input is of correct type
 		while (cin.fail()) {
 			cout << "Error" << std::endl;
 			cin.clear();
@@ -216,9 +238,10 @@ void Menu::runsMenu()
 			cout << "How many runs for each algorithm? (0 to go back to main): ";
 			input = getInput();
 		}
-
+		//runs can only be set if input is >= 1
 		if (input >= 1)
 		{
+			//setting runs according to input
 			numberRuns = input;
 			if (numberRuns == 1)
 			{
@@ -231,6 +254,7 @@ void Menu::runsMenu()
 			break;
 		}
 
+		//if input is <= 0, then exits the loop and goes back
 	} while (input > 0);
 }
 
@@ -241,6 +265,7 @@ void Menu::printMenu()
 	{
 		cout << endl << endl << "---- PRINTING MENU ----" << endl << endl;
 		cout << "Is currently writing primes to file?: ";
+		//outputs current status of boolean
 		if (toPrint)
 		{
 			cout << "Yes" << endl << endl;
@@ -283,6 +308,7 @@ void Menu::printMenu()
 
 int Menu::getInput()
 {
+	//getting the input and returning it
 	int input;
 	cin >> input;
 	return input;

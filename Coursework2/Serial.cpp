@@ -22,14 +22,17 @@ void Serial::SieveOfEratosthenes() {
 	int n = thisLimit;
 	// Creating a vector of booleans and initializing values as true
 	vector<bool> isPrime(n + 1, true);
+
 	string file;
 
-	file = "Eratosthenes_serial_time_lab.csv";
+	file = "Eratosthenes_serial_time.csv";
 
-
+	// file to output timings
 	ofstream timings(file, ios_base::app);
 
+	//starting clock
 	auto start = system_clock::now();
+
 	// Setting i to 2, as it is the first prime number
 	// Looping through all numbers up to n
 	for (int i = 2; i * i <= n; i++)
@@ -46,12 +49,13 @@ void Serial::SieveOfEratosthenes() {
 		}
 	}
 
-
+	//ending clock and calculate time. Output it to file
 	auto end = system_clock::now();
 	auto total = duration_cast<milliseconds>(end - start).count();
 	timings << total / 1000.0 << endl;
 	timings.close();
 
+	//if thisPrint is true, outputs primes to file
 	if (thisPrint)
 	{
 		ofstream primes("Eratosthenes_primes.csv", ios_base::out);
@@ -85,10 +89,12 @@ void Serial::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_serial_time_lab.csv";
+	file = "Sundaram_serial_time.csv";
 
+	// file to output timings
 	ofstream timings(file, ios_base::app);
 
+	//starting clock
 	auto start = system_clock::now();
 
 
@@ -121,18 +127,20 @@ void Serial::SieveOfSundaram()
 		}
 	}
 
+	//ending clock
 	auto end = system_clock::now();
 	auto total = duration_cast<milliseconds>(end - start).count();
 	timings << total / 1000.0 << endl;
 	timings.close();
 
+	//if true, output to file
 	if (thisPrint)
 	{
 		ofstream primes("Sundaram_primes.csv", ios_base::out);
 
 		for (int x = 0; x <= nPrimes; x++)
 		{
-			// If the prime number does not equal zero then output - else then break
+			// If the prime number does not equal zero then output then break
 			if (isPrime[x] != 0)
 			{
 				primes << isPrime[x] << endl;
@@ -156,10 +164,12 @@ void Serial::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_serial_time_lab.csv";
+	file = "Atkin_serial_time.csv";
 
+	// file to output timings
 	ofstream timings(file, ios_base::app);
 
+	//starting clock
 	auto start = system_clock::now();
 
 	// 2 and 3 are known to be prime

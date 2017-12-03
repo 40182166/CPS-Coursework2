@@ -25,12 +25,12 @@ void OpenMP::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_tryOMP_time_lab.csv";
+	file = "Eratosthenes_OMP_time.csv";
 
+	//retrieving available threads
 	auto nThreads = thread::hardware_concurrency();
 
 	ofstream timings(file, ios_base::app);
-
 
 	auto start = system_clock::now();
 	// Setting i to 2, as it is the first prime number
@@ -43,6 +43,7 @@ void OpenMP::SieveOfEratosthenes() {
 		// If prime[i] is false, it has been marked as not prime
 		if (isPrime[i])
 		{
+			//OpenMP statement taking number of available threads
 #pragma omp parallel for num_threads(nThreads)
 			// Looping through multiples of i and marking them as false (non-prime)
 			for (int j = i * 2; j <= n; j += i)
@@ -89,14 +90,16 @@ void OpenMP::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_OMP_time_lab.csv";
+	file = "Sundaram_OMP_time.csv";
 
 	ofstream timings(file, ios_base::app);
 
+	//retrieving available threads
 	auto nThreads = thread::hardware_concurrency();
 
 	auto start = system_clock::now();
 
+	//OpenMP statement taking number of available threads
 	//splitting the workload in chunks of 10
 #pragma omp parallel for num_threads(nThreads) schedule(static, 10)
 	for (int i = 1; i < n; i++)
@@ -165,10 +168,11 @@ void OpenMP::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_OMP_time_lab.csv";
+	file = "Atkin_OMP_time.csv";
 
 	ofstream timings(file, ios_base::app);
 
+	//retrieving available threads
 	auto nThreads = thread::hardware_concurrency();
 
 	auto start = system_clock::now();
@@ -179,9 +183,6 @@ void OpenMP::SieveOfAtkin()
 
 	// Rounding square root of n up to the nearest integer
 	int lim = (int)ceil(sqrt(n));
-
-	//int y;
-
 
 	// Looping through x and y, finding numbers that meet the conditions
 	for (int x = 1; x <= lim; x++)
@@ -272,20 +273,25 @@ void Thread::SieveOfEratosthenes()
 	vector<bool> isPrime(thisLimit + 1, true);
 	string file;
 
-	file = "Eratosthenes_threads_time_lab.csv";
+	file = "Eratosthenes_threads_time.csv";
 
+	//retrieving available threads
 	auto nThreads = thread::hardware_concurrency();
 
+	//getting the outer loop end, acconding to algorithm requirements
 	int n = (int)floor(sqrt((double)thisLimit));
 
+	//defining range by splitting workload amongst threads
 	int range = n / nThreads;
 
 	ofstream timings(file, ios_base::app);
 
+	//creating vector to hold threads
 	vector<thread> threads;
 
 	auto start = system_clock::now();
 
+	//start point for Eratosthenes is 2
 	int startPoint = 2;
 	int endPoint;
 
@@ -294,23 +300,23 @@ void Thread::SieveOfEratosthenes()
 		//endPoint is the previous start point plus the range
 		endPoint = (startPoint + 1) + range;
 
+		//Enpoint can't be greater than the maximum number of data
 		if (endPoint > thisLimit)
 		{
 			endPoint = thisLimit;
 		}
 		//Creating and pushing Threads into a vector
-		threads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, endPoint, i, ref(isPrime)));
+		threads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, endPoint, ref(isPrime)));
 
 		//setting start at end of previous thread + 1
 		//this is because in the main loop of the algorithm the x is <= end.
 		startPoint = endPoint + 1;
 	}
-
+	//joining all threads in the vector
 	for (auto &t : threads)
 	{
 		t.join();
 	}
-
 
 	auto end = system_clock::now();
 	auto total = duration_cast<milliseconds>(end - start).count();
@@ -334,7 +340,8 @@ void Thread::SieveOfEratosthenes()
 
 }
 
-void Thread::threadedEratosthenes(int start, int end, int index, vector<bool>& primes)
+//Method that holds main logic of Eratosthenes. This is used to create threads
+void Thread::threadedEratosthenes(int start, int end, vector<bool>& primes)
 {
 	for (int i = start; i <= end; i++)
 	{
@@ -367,18 +374,22 @@ void Thread::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_threads_time_lab.csv";
+	file = "Sundaram_threads_time.csv";
 
 	ofstream timings(file, ios_base::app);
 
+	//retrieving available threads
 	auto nThreads = thread::hardware_concurrency();
 
+	//vector to hold threads
 	vector<thread> allThreads;
 
 	auto start = system_clock::now();
 
+	//defining range by splitting workload amongst threads
 	auto range = n / nThreads;
 
+	//sundaram starts from 1
 	int startPoint = 1;
 	int endPoint = 1;
 
@@ -394,7 +405,7 @@ void Thread::SieveOfSundaram()
 		//this is because in the main loop of the algorithm the x is <= end.
 		startPoint = endPoint + 1;
 	}
-
+	//joining threads
 	for (auto &t : allThreads)
 	{
 		t.join();
@@ -441,6 +452,7 @@ void Thread::SieveOfSundaram()
 	}
 }
 
+//method that holds main logic for Sundaram and it is used to create threads
 void Thread::threadedSundaram(int start, int end, vector<int>& primes)
 {
 	for (int i = start; i <= end; i++)
@@ -470,14 +482,15 @@ void Thread::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_threads_time_lab.csv";
+	file = "Atkin_threads_time.csv";
 
 	ofstream timings(file, ios_base::app);
 
+	//getting available threads
 	auto nThreads = thread::hardware_concurrency();
 
-	vector<thread> allThreads1;
-	//vector<thread> allThreads2;
+	vector<thread> allThreads;
+
 	auto start = system_clock::now();
 
 	// 2 and 3 are known to be prime
@@ -489,6 +502,7 @@ void Thread::SieveOfAtkin()
 
 	auto range = lim / nThreads;
 
+	//Atkin startes at 1
 	int startPoint = 1;
 	int endPoint = 1;
 
@@ -499,13 +513,13 @@ void Thread::SieveOfAtkin()
 		endPoint = startPoint + range;
 
 		//Creating and pushing Threads into a vector
-		allThreads1.push_back(thread(&Thread::threadedAtkin, this, startPoint, endPoint, ref(isPrime)));
+		allThreads.push_back(thread(&Thread::threadedAtkin, this, startPoint, endPoint, ref(isPrime)));
 		//setting start at end of previous thread + 1
 		//this is because in the main loop of the algorithm the x is <= end.
 		startPoint = endPoint + 1;
 	}
-
-	for (auto &t : allThreads1)
+	//joining threads
+	for (auto &t : allThreads)
 	{
 		t.join();
 	}
@@ -548,6 +562,7 @@ void Thread::SieveOfAtkin()
 
 }
 
+//method used to create threads that holds main Atkin's logic
 void Thread::threadedAtkin(int start, int end, vector<bool>& primes)
 {
 
