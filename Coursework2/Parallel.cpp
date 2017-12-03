@@ -25,7 +25,7 @@ void OpenMP::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_tryOMP_time_home.csv";
+	file = "Eratosthenes_tryOMP_time_lab.csv";
 
 	auto nThreads = thread::hardware_concurrency();
 
@@ -35,10 +35,7 @@ void OpenMP::SieveOfEratosthenes() {
 	auto start = system_clock::now();
 	// Setting i to 2, as it is the first prime number
 	// Looping through all numbers up to n
-	int nSqrt = (int)sqrt(n);
-
-	int j;
-
+	
 
 	for (int i = 2; i * i <= n; i++)
 	{
@@ -48,7 +45,7 @@ void OpenMP::SieveOfEratosthenes() {
 		{
 #pragma omp parallel for num_threads(nThreads)
 			// Looping through multiples of i and marking them as false (non-prime)
-			for (j = i * 2; j <= n; j += i)
+			for (int j = i * 2; j <= n; j += i)
 			{
 				isPrime[j] = false;
 			}
@@ -92,7 +89,7 @@ void OpenMP::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_OMP_time_home.csv";
+	file = "Sundaram_OMP_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -168,7 +165,7 @@ void OpenMP::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_OMP_time_home.csv";
+	file = "Atkin_OMP_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -267,6 +264,7 @@ Thread::~Thread()
 {
 }
 
+// Base Algorithm for threads has been taken from a different source : http://www.algolist.net/Algorithms/Number_theoretic/Sieve_of_Eratosthenes 
 void Thread::SieveOfEratosthenes()
 {
 	// Creating a vector of booleans and initializing values as true
@@ -274,9 +272,13 @@ void Thread::SieveOfEratosthenes()
 	vector<bool> isPrime(thisLimit + 1, true);
 	string file;
 
-	file = "Eratosthenes_threads_time_home.csv";
+	file = "Eratosthenes_threads_time_lab.csv";
 
 	auto nThreads = thread::hardware_concurrency();
+
+	int n = (int)floor(sqrt((double)thisLimit));
+
+	int range = n / nThreads;
 
 	ofstream timings(file, ios_base::app);
 
@@ -284,51 +286,31 @@ void Thread::SieveOfEratosthenes()
 
 	auto start = system_clock::now();
 
-	int range;
+	int startPoint = 2;
+	int endPoint;
 
-	for (int i = 2; i * i <= thisLimit; i++)
+	for (int i = 1; i <= nThreads; i++)
 	{
+		//endPoint is the previous start point plus the range
+		endPoint = (startPoint + 1) + range;
 
-		// If prime[p] is not checked/prime
-		if (isPrime[i])
+		if (endPoint > thisLimit)
 		{
-			// Divide limit by p to find number of multiples to split amongst threads
-			int numberOfMultiples = thisLimit / i;
-			range = numberOfMultiples / nThreads;
-
-			//defining start for first thread (see serial algorithm has i * 2 as inner loop starting point)
-			int startPoint = i * 2;
-			int endPoint;
-			
-			// making sure vector is empty before pushing threads for next iteration
-			if (!threads.empty())
-			{
-				threads.clear();
-			}
-
-			for (int t = 1; t <= nThreads; t++)
-			{
-				// end of current thread is start + range * loop index
-				endPoint = startPoint + range * i;
-
-				// not defining end limit for last chucks, throws an exception
-				if (endPoint > thisLimit)
-				{
-					endPoint = thisLimit;
-				}
-				
-				//creating the thread passing values and vector
-				threads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, endPoint, i, ref(isPrime)));
-				//start of next thread is the end of current thread + 1
-				startPoint = endPoint + 1;
-			}
-
-			for (auto &t : threads)
-			{
-				t.join();
-			}
+			endPoint = thisLimit;
 		}
-	} // end run loop
+		//Creating and pushing Threads into a vector
+		threads.push_back(thread(&Thread::threadedEratosthenes, this, startPoint, endPoint, i, ref(isPrime)));
+
+		//setting start at end of previous thread + 1
+		//this is because in the main loop of the algorithm the x is <= end.
+		startPoint = endPoint + 1;
+	}
+
+	for (auto &t : threads)
+	{
+		t.join();
+	}
+
 
 	auto end = system_clock::now();
 	auto total = duration_cast<milliseconds>(end - start).count();
@@ -354,10 +336,18 @@ void Thread::SieveOfEratosthenes()
 
 void Thread::threadedEratosthenes(int start, int end, int index, vector<bool>& primes)
 {
-	for (int i = start; i <= end; i += index)
+	for (int i = start; i <= end; i++)
 	{
-		// This is not a prime
-		primes[i] = false;
+		// If prime[i] is true (unchanged), then the number is a prime
+		// If prime[i] is false, it has been marked as not prime
+		if (primes[i])
+		{
+			// Looping through multiples of i and marking them as false (non-prime)
+			for (int j = i * i; j <= thisLimit; j += i)
+			{
+				primes[j] = false;
+			}
+		}
 	}
 
 }
@@ -377,7 +367,7 @@ void Thread::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_threads_time_home.csv";
+	file = "Sundaram_threads_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -480,7 +470,7 @@ void Thread::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_threads_time_home.csv";
+	file = "Atkin_threads_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 

@@ -17,7 +17,6 @@ Serial::~Serial()
 }
 
 // From : http://www.geeksforgeeks.org/sieve-of-eratosthenes/
-// Option 2 From: http://www.algolist.net/Algorithms/Number_theoretic/Sieve_of_Eratosthenes
 void Serial::SieveOfEratosthenes() {
 
 	int n = thisLimit;
@@ -25,7 +24,7 @@ void Serial::SieveOfEratosthenes() {
 	vector<bool> isPrime(n + 1, true);
 	string file;
 
-	file = "Eratosthenes_serial_time_home.csv";
+	file = "Eratosthenes_serial_time_lab.csv";
 
 
 	ofstream timings(file, ios_base::app);
@@ -86,7 +85,7 @@ void Serial::SieveOfSundaram()
 
 	string file;
 
-	file = "Sundaram_serial_time_home.csv";
+	file = "Sundaram_serial_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
@@ -157,7 +156,7 @@ void Serial::SieveOfAtkin()
 
 	string file;
 
-	file = "Atkin_serial_time_home.csv";
+	file = "Atkin_serial_time_lab.csv";
 
 	ofstream timings(file, ios_base::app);
 
