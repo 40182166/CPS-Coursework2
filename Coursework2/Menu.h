@@ -15,7 +15,7 @@ public:
 
 	void executeEverything();
 
-	int numberRuns = 10;
+	int numberRuns = 3;
 
 	// Selecting mode of run (technique)
 	// 1 --> default: serial

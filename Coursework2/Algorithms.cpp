@@ -17,9 +17,9 @@ void Algorithms::execute()
 
 		cout << "Calculating Eratosthenes..." << endl;
 		SieveOfEratosthenes();
-		cout << "Calculating Sundaram..." << endl;
-		SieveOfSundaram();
-		cout << "Calculating Atkin..." << endl;
-		SieveOfAtkin();
+		//cout << "Calculating Sundaram..." << endl;
+		//SieveOfSundaram();
+		//cout << "Calculating Atkin..." << endl;
+		//SieveOfAtkin();
 	}
 }
